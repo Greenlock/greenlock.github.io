@@ -40,16 +40,13 @@ function parseCommand(command) {
     for (var i = 0; i < command.length; i++) {
         var c = command.charAt(i);
         if (isLiteral) {
+            currentToken += c;
             if (c == "\"") {
-                currentToken += "\"";
-                args.push(eval(currentToken));
+                args.push(JSON.parse(currentToken));
+                currentToken = "";
                 isLiteral = false;
             } else if (c == "\\") {
-                currentToken += "\\";
-                i++;
-                currentToken += command.charAt(i);
-            } else {
-                currentToken += c;
+                currentToken += command.charAt(++i);
             }
         } else {
             if (c == "\"") {
@@ -70,9 +67,9 @@ function parseCommand(command) {
         }
     }
     if (currentToken.length > 0) {
-        if (currentToken.startsWith("\"")) {
+        if (isLiteral) {
             currentToken += "\"";
-            args.push(eval(currentToken));
+            args.push(JSON.parse(currentToken));
         } else {
             args.push(currentToken);
         }
