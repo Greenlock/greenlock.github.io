@@ -4,17 +4,11 @@
 	<head>
 		<title>greenlock.co - Home of the greenest of beans</title>
 		
-		<link rel="stylesheet" type="text/css" href="./style.css"/>
 		<script src="./jquery.min.js"></script>
         <script src="./underscore.min.js"></script>
-		<script src="./main.js"></script>
-		<script src="./webconsole.js"></script>
+		<script src="./shell.js"></script>
+		<script src="./terminal.js"></script>
 	</head>
 
-	<body onload="onLoad()">
-		<div id="container">
-			<span id="stdout-container"></span>
-			<input id="stdin" type="text"/>
-		</div>
-	</body>
+	<body onload="entrypoint()"></body>
 </html>
