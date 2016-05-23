@@ -12,22 +12,41 @@ function repl() {
     terminal.print("user />");
     terminal.readLine(function (command) {
         var args = parseCommand(command);
-        if (args[0].toLowerCase() == "help") {
-            terminal.printLine("This website is a very (veery) simple implementation of a Bash-esque command");
-            terminal.printLine("line. There is currently no user or filesystem support. This is pretty much");
-            terminal.printLine("a barebones system right now.");
-            terminal.printLine("");
-            terminal.printLine("As of now, available commands are:");
-            terminal.printLine("echo  --  Prints a given line of text.");
-        } else if (args[0].toLowerCase() == "echo") {
-            var remainingArgs = argsFrom(1, args);
-            var echo = "";
-            for (var i = 0; i < remainingArgs.length; i++) {
-                echo += (i == 0 ? "" : " ") + remainingArgs[i];
+        if (args.length > 0) {
+            if (args[0].toLowerCase() == "help") {
+                terminal.printLine("This website is a very (veery) simple implementation of a Bash-esque command");
+                terminal.printLine("line. There is currently no user or filesystem support. This is pretty much");
+                terminal.printLine("a barebones system right now.");
+                terminal.printLine("");
+                terminal.printLine("As of now, available commands are:");
+                terminal.printLine("echo  --  Prints a given line of text.");
+                terminal.printLine("cls|clear  --  Clears all previous output.");
+                terminal.printLine("color  --  Changes text and background colors.");
+            } else if (args[0].toLowerCase() == "echo") {
+                if (args.length < 2) {
+                    terminal.printLine("Not enough arguments. Use me like this: 'echo <some text>'");
+                } else {
+                    var remainingArgs = argsFrom(1, args);
+                    var echo = "";
+                    for (var i = 0; i < remainingArgs.length; i++) {
+                        echo += (i == 0 ? "" : " ") + remainingArgs[i];
+                    }
+                    terminal.printLine(echo);
+                }
+            } else if (args[0].toLowerCase() == "cls" || args[0].toLowerCase() == "clear") {
+                terminal.clearScreen();
+            } else if (args[0].toLowerCase() == "color") {
+                if (args.length < 2) {
+                    terminal.printLine("Not enough arguments. Use me like this: 'color <text color> <background color>'");
+                } else if (args.length < 3) {
+                    terminal.foregroundColor = args[1];
+                } else {
+                    if (args[1] != "-") terminal.foregroundColor = args[1];
+                    terminal.backgroundColor = args[2];
+                }
+            } else {
+                terminal.printLine(args[0] + " is not a known command.");
             }
-            terminal.printLine(echo);
-        } else {
-            terminal.printLine(args[0] + " is not a known command.");
         }
         setTimeout(repl, 0);
     });
