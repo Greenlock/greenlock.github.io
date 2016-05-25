@@ -4,12 +4,17 @@
 
     terminal.cursorLeft = 0;
     terminal.cursorTop = 0;
-    terminal.foregroundColor = "white";
-    terminal.backgroundColor = "black";
+
+    terminal.foregroundColor = 0;
+    terminal.backgroundColor = 0;
+    terminal.defaultForegroundColor = "white";
+    terminal.defaultBackgroundColor = "black";
 
     var nextLine = 0,
+
         readMode = 0,
         readCallback = null,
+
         lineCache = [],
         lineForegroundColors = [],
         lineBackgroundColors = [],
@@ -64,8 +69,99 @@
     }
 
 
-    terminal.printLine = function (line) {
-        terminal.print(line + "\n");
+    function updateQueuedLines() {
+        for (var queueIndex = 0; queueIndex < lineUpdateQueue.length; queueIndex++) {
+            var lineNumber = lineUpdateQueue[queueIndex];
+            var line = lineCache[lineNumber];
+
+            for (var i = nextLine; i <= lineNumber; i++) {
+                var lineObject = $("<span id=\"stdout-" + i.toString() + "\"></span></br>");
+                $("#stdout-container").append(lineObject);
+                nextLine = i + 1;
+            }
+
+            var rawHtml = "";
+            var hasSpans = false;
+            var currentForeground = 0;
+            var currentBackground = 0;
+
+            for (var i = 0; i < line.length; i++) {
+                if (currentForeground != lineForegroundColors[lineNumber][i] ||
+                        currentBackground != lineBackgroundColors[lineNumber][i]) {
+                    if (hasSpans) {
+                        rawHtml += "</span>";
+                    }
+                    hasSpans = true;
+                    rawHtml += "<span style=\"";
+                    if (currentForeground != lineForegroundColors[lineNumber][i]) {
+                        currentForeground = lineForegroundColors[lineNumber][i];
+                        if (currentForeground !== 0) {
+                            rawHtml += "color:" + currentForeground + ";";
+                        }
+                    }
+                    if (currentBackground != lineBackgroundColors[lineNumber][i]) {
+                        currentBackground = lineBackgroundColors[lineNumber][i];
+                        if (currentBackground !== 0) {
+                            rawHtml += "background-color:" + currentBackground + ";";
+                        }
+                    }
+                    rawHtml += "\">";
+                }
+
+                if (line.charAt(i) == " ") {
+                    rawHtml += "&nbsp;";
+                } else {
+                    rawHtml += _.escape(line.charAt(i));
+                }
+            }
+
+            if (hasSpans) {
+                rawHtml += "</span>";
+            }
+
+            $("#stdout-" + lineNumber.toString()).html(rawHtml);
+        }
+
+        lineUpdateQueue = []
+        terminal.lines = lineCache;
+    }
+
+    function printChar(c) {
+        if (terminal.cursorLeft >= 80) terminal.cursorLeft = 79;
+        if (terminal.cursorLeft < 0) terminal.cursorLeft = 0;
+        if (terminal.cursorTop < 0) terminal.cursorTop = 0;
+
+        while (lineCache.length <= terminal.cursorTop) {
+            var emptyForegroundColors = [];
+            var emptyBackgroundColors = [];
+            for (var i = 0; i < 80; i++) {
+                emptyForegroundColors.push(0);
+                emptyBackgroundColors.push(0);
+            }
+            lineForegroundColors.push(emptyForegroundColors);
+            lineBackgroundColors.push(emptyBackgroundColors);
+
+            lineCache.push("");
+        }
+
+        var currentLine = lineCache[terminal.cursorTop];
+        while (currentLine.length <= terminal.cursorLeft) {
+            currentLine += " ";
+        }
+        lineCache[terminal.cursorTop] = currentLine.substring(0, terminal.cursorLeft) + c + currentLine.substring(terminal.cursorLeft + 1, currentLine.length);
+        
+        lineForegroundColors[terminal.cursorTop][terminal.cursorLeft] = terminal.foregroundColor;
+        lineBackgroundColors[terminal.cursorTop][terminal.cursorLeft] = terminal.backgroundColor;
+
+        if (!_.contains(lineUpdateQueue, terminal.cursorTop)) {
+            lineUpdateQueue.push(terminal.cursorTop);
+        }
+
+        terminal.cursorLeft++;
+        if (terminal.cursorLeft >= 80) {
+            terminal.cursorLeft = 0;
+            terminal.cursorTop++;
+        }
     }
 
     terminal.print = function (line) {
@@ -101,83 +197,8 @@
         }
     }
 
-    function printChar(c) {
-        if (terminal.cursorLeft >= 80) terminal.cursorLeft = 79;
-        if (terminal.cursorLeft < 0) terminal.cursorLeft = 0;
-        if (terminal.cursorTop < 0) terminal.cursorTop = 0;
-
-        while (lineCache.length <= terminal.cursorTop) {
-            var emptyForegroundColors = [];
-            var emptyBackgroundColors = [];
-            for (var i = 0; i < 80; i++) {
-                emptyForegroundColors.push("white");
-                emptyBackgroundColors.push("black");
-            }
-            lineForegroundColors.push(emptyForegroundColors);
-            lineBackgroundColors.push(emptyBackgroundColors);
-
-            lineCache.push(" ");
-        }
-
-        var currentLine = lineCache[terminal.cursorTop];
-        console.log(currentLine);
-        if (currentLine.length <= terminal.cursorLeft) {
-            for (var i = 0; i < terminal.cursorLeft + 1; i++) {
-                currentLine += " ";
-            }
-        }
-        lineCache[terminal.cursorTop] = currentLine.substring(0, terminal.cursorLeft) + c + currentLine.substring(terminal.cursorLeft + 1, currentLine.length);
-        
-        lineForegroundColors[terminal.cursorTop][terminal.cursorLeft] = terminal.foregroundColor;
-        lineBackgroundColors[terminal.cursorTop][terminal.cursorLeft] = terminal.backgroundColor;
-
-        if (!_.contains(lineUpdateQueue, terminal.cursorTop)) {
-            lineUpdateQueue.push(terminal.cursorTop);
-        }
-
-        terminal.cursorLeft++;
-        if (terminal.cursorLeft >= 80) {
-            terminal.cursorLeft = 0;
-            terminal.cursorTop++;
-        }
-    }
-
-    function updateQueuedLines() {
-        for (var queueIndex = 0; queueIndex < lineUpdateQueue.length; queueIndex++) {
-            var lineNumber = lineUpdateQueue[queueIndex];
-            var line = lineCache[lineNumber];
-
-            for (var i = nextLine; i <= lineNumber; i++) {
-                var lineObject = $("<span id=\"stdout-" + i.toString() + "\"></span></br>");
-                $("#stdout-container").append(lineObject);
-                nextLine = i + 1;
-            }
-
-            var rawHtml = "";
-            var hasSpans = false;
-            var currentForeground = "white";
-            var currentBackground = "black"
-            for (var i = 0; i < line.length; i++) {
-                if (currentForeground != lineForegroundColors[lineNumber][i] ||
-                        currentBackground != lineBackgroundColors[lineNumber][i]) { //TODO: This should be optimized by omitting 'color' and 'background-color' if they have default values.
-                    hasSpans = true;
-                    currentForeground = lineForegroundColors[lineNumber][i];
-                    currentBackground = lineBackgroundColors[lineNumber][i];
-                    if (i > 0) {
-                        rawHtml += "</span>";
-                    }
-                    rawHtml += "<span style=\"color:" + currentForeground + ";background-color:" + currentBackground + ";\">";
-                }
-                rawHtml += _.escape(line.substring(i, i+1));
-            }
-            if (hasSpans) {
-                rawHtml += "</span>";
-            }
-
-            $("#stdout-" + lineNumber.toString()).html(rawHtml);
-        }
-        lineUpdateQueue = []
-        terminal.lines = lineCache;
+    terminal.printLine = function (line) {
+        terminal.print(line + "\n");
     }
 
 
@@ -191,6 +212,29 @@
         terminal.cursorLeft = 0;
         terminal.cursorTop = 0;
     }
+
+    terminal.setDefaultForegroundColor = function(color) {
+        terminal.defaultForegroundColor = color;
+        $("body").css("color", color);
+        $("#stdin").css("color", terminal.foregroundColor === 0 ? color : terminal.foregroundColor);
+    }
+
+    terminal.setDefaultBackgroundColor = function (color) {
+        terminal.defaultBackgroundColor = color;
+        $("body").css("background-color", color);
+        $("#stdin").css("background-color", terminal.backgroundColor === 0 ? color : terminal.backgroundColor);
+    }
+
+    terminal.setForegroundColor = function (color) {
+        terminal.foregroundColor = color;
+        $("#stdin").css("color", color === 0 ? terminal.defaultForegroundColor : color);
+    }
+
+    terminal.setBackgroundColor = function (color) {
+        terminal.backgroundColor = color;
+        $("#stdin").css("background-color", color === 0 ? terminal.defaultBackgroundColor : color);
+    }
+
 
     terminal.readLine = function(callback) {
         readMode = WC_READ_LINE;
