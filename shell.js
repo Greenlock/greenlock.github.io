@@ -2,13 +2,32 @@
 
     this.shell = function() { };
 
+
+    var users = {},
+        currentUser = null,
+        userToken = null;
+
+
     shell.main = function() {
         terminal.initialize();
 
-        terminal.printLine("Welcome to greenlock.co! This website is a command-line terminal.");
-        terminal.printLine("Type 'help' for more information.");
+        terminal.setForegroundColor("#00AA00");
+        terminal.print("Greenlock.co");
+        terminal.resetForegroundColor();
+        terminal.print(" // ");
+        terminal.setForegroundColor("#88FF88");
+        terminal.printLine("Home of the Greenest of Beans");
+        terminal.resetForegroundColor();
 
-        repl();
+        filesystem.mountStatic("https://www.greenlock.co/staticfs", "/", function() {
+            console.log(filesystem.getDirectories("/"));
+        });
+    }
+
+    function login() {
+        terminal.printLine("");
+        terminal.printLine("Enter your username if you have one, otherwise just make something up.");
+        terminal.print("username>");
     }
 
     function repl() {
@@ -18,9 +37,9 @@
             var args = parseCommand(command);
             if (args.length > 0) {
                 if (args[0].toLowerCase() == "help") {
-                    terminal.printLine("This website is a very (veery) simple implementation of a Bash-esque command");
-                    terminal.printLine("line. There is currently no user or filesystem support. This is pretty much");
-                    terminal.printLine("a barebones system right now.");
+                    terminal.printLine("This website is a very (veery) simple implementation of a Bash-esque");
+                    terminal.printLine("command line. There is currently no user or filesystem support. This is");
+                    terminal.printLine("pretty much a barebones system right now.");
                     terminal.printLine("");
                     terminal.printLine("As of now, available commands are:");
                     terminal.printLine("echo  --  Prints a given line of text.");
