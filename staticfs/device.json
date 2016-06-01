@@ -1,1 +1,1 @@
-{"directories":{"var":{},"sys":{}},"files":["hello.txt"]}
+{"directories":{"var":{},"sys":{"directories":{"bin":{},"env":{}},"files":[]}},"files":["hello.txt"]}
