@@ -8,8 +8,9 @@
         userToken = null;
 
 
-    shell.main = function() {
+    shell.main = function () {
         terminal.initialize();
+        iframeutil.initialize(true);
 
         terminal.setForegroundColor("#00AA00");
         terminal.print("Greenlock.co");
@@ -20,7 +21,10 @@
         terminal.resetForegroundColor();
 
         filesystem.mountStatic("https://www.greenlock.co/staticfs", "/", function() {
-            console.log(filesystem.getDirectories("/"));
+            console.log(filesystem.getFiles("/sys/"));
+            filesystem.readFile("/hello.txt", function (data) {
+                console.log(data);
+            });
         });
     }
 
@@ -74,6 +78,7 @@
             setTimeout(repl, 0);
         });
     }
+
 
     function parseCommand(command) {
         var args = [];
