@@ -5,10 +5,10 @@
     var readMode = 0,
         readCallback = null,
 
-        foregroundColor = "white";
-        backgroundColor = "black";
-        defaultForegroundColor = "white";
-        defaultBackgroundColor = "black";
+        foregroundColor = "white",
+        backgroundColor = "black",
+        defaultForegroundColor = "white",
+        defaultBackgroundColor = "black",
 
         WC_NONE = 0,
         WC_READ_LINE = 1,
