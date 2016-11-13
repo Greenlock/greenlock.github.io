@@ -1,0 +1,54 @@
+body {
+  font-family: "Courier New";
+  font-size: 16px;
+}
+
+#transition-back {
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+#transition-container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  #page-container {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    right: 0px;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #page-container {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+  }
+}
+
+#stdin {
+  position: absolute;
+  width: 100%;
+  font-family: "Courier New";
+  font-size: 16px;
+  visibility: hidden;
+  border: none;
+  margin-top: -1px;
+}
+
+#stdin:focus
+{
+  outline:none;
+}
