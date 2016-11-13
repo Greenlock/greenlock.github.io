@@ -8,6 +8,11 @@
         userToken = null;
 
 
+    shell.altmain = function () {
+        terminal.print("I am test.\nHola>");
+        terminal.readLn(function (command) { terminal.setDefaultColors("black", "white", function() {}); });
+    }
+
     shell.main = function () {
         terminal.initialize();
         iframeutil.initialize(true);
