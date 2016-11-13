@@ -4,7 +4,7 @@
 
     page.main = function() {
         terminal.println("Hello, World!");
-        terminal.setDefaultColors("white", "black", function() {});
+        terminal.setDefaultColors("black", "white", function() {});
     }
 
 }.call(this));
