@@ -66,7 +66,7 @@
         var spanObject = $(spanHtml);
         var hrefObject = $("<a></a>");
         hrefObject.attr("href", href);
-        hrefObject.append(splitLine[i].replace("\n", "").replace(" ", "&nbsp;"));
+        hrefObject.append(line.replace("\n", "").replace(" ", "&nbsp;"));
         spanObject.append(hrefObject);
         $("#content-container").append(spanObject);
     }
