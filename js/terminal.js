@@ -40,6 +40,37 @@
         terminal.print(line + "\n");
     }
 
+    terminal.printhtml = function(line) {
+        var spanHtml = "<span style=\"";
+        if (foregroundColor != defaultForegroundColor) {
+            spanHtml += "color:" + foregroundColor + ";";
+        }
+        if (backgroundColor != defaultBackgroundColor) {
+            spanHtml += "background-color:" + backgroundColor;
+        }
+        spanHtml += "\"></span>";
+        var spanObject = $(spanHtml);
+        spanObject.append(line);
+        $("#content-container").append(spanObject);
+    }
+
+    terminal.printlink = function(line, href) {
+        var spanHtml = "<span style=\"";
+        if (foregroundColor != defaultForegroundColor) {
+            spanHtml += "color:" + foregroundColor + ";";
+        }
+        if (backgroundColor != defaultBackgroundColor) {
+            spanHtml += "background-color:" + backgroundColor;
+        }
+        spanHtml += "\"></span>";
+        var spanObject = $(spanHtml);
+        var hrefObject = $("<a></a>");
+        hrefObject.attr("href", href);
+        hrefObject.append(splitLine[i].replace("\n", "").replace(" ", "&nbsp;"));
+        spanObject.append(hrefObject);
+        $("#content-container").append(spanObject);
+    }
+
     terminal.clearScreen = function() {
         $("#content-container").html("");
     }
