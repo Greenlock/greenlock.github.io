@@ -32,6 +32,8 @@
 
         terminal.setForegroundColor("violet");
         terminal.println("*This website is Certified Tasty");
+
+        shell.main();
     }
 
 }.call(this));

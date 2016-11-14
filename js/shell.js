@@ -2,61 +2,25 @@
 
     this.shell = function() { };
 
-
-    var users = {},
-        currentUser = null,
-        userToken = null;
-
-
-    shell.altmain = function () {
-        terminal.print("I am test.\nHola>");
-        terminal.readLn(function (command) { terminal.setDefaultColors("black", "white", function() {}); });
-    }
-
     shell.main = function () {
-        terminal.initialize();
-        iframeutil.initialize(true);
-
-        terminal.setForegroundColor("#00AA00");
-        terminal.print("Greenlock.co");
         terminal.resetForegroundColor();
-        terminal.print(" // ");
-        terminal.setForegroundColor("#88FF88");
-        terminal.printLine("Home of the Greenest of Beans");
-        terminal.resetForegroundColor();
-
-        filesystem.mountStatic("https://www.greenlock.co/staticfs", "/", function() {
-            console.log(filesystem.getFiles("/sys/"));
-            filesystem.readFile("/hello.txt", function (data) {
-                console.log(data);
-            });
-        });
-    }
-
-    function login() {
-        terminal.printLine("");
-        terminal.printLine("Enter your username if you have one, otherwise just make something up.");
-        terminal.print("username>");
+        shell.repl();
     }
 
     function repl() {
-        terminal.printLine("");
-        terminal.print("user />");
-        terminal.readLine(function (command) {
+        var cd = localStorage.getItem("cd");
+        terminal.print("\n[web " + (cd === false ? "/" : cd + "]$ ");
+        terminal.readln(function (command) {
             var args = parseCommand(command);
             if (args.length > 0) {
                 if (args[0].toLowerCase() == "help") {
-                    terminal.printLine("This website is a very (veery) simple implementation of a Bash-esque");
-                    terminal.printLine("command line. There is currently no user or filesystem support. This is");
-                    terminal.printLine("pretty much a barebones system right now.");
-                    terminal.printLine("");
-                    terminal.printLine("As of now, available commands are:");
-                    terminal.printLine("echo  --  Prints a given line of text.");
-                    terminal.printLine("cls|clear  --  Clears all previous output.");
-                    terminal.printLine("color  --  Changes text and background colors.");
+                    terminal.println("This website is a Bash-esque command line terminal.");
+                    terminal.println("Available commands: help, echo, cls, clear, color");
                 } else if (args[0].toLowerCase() == "echo") {
                     if (args.length < 2) {
-                        terminal.printLine("Not enough arguments. Use me like this: 'echo <some text>'");
+                        terminal.setForegroundColor("red");
+                        terminal.println("Not enough arguments.");
+                        terminal.resetForegroundColor();
                     } else {
                         var remainingArgs = argsFrom(1, args);
                         var echo = "";
@@ -69,13 +33,17 @@
                     terminal.clearScreen();
                 } else if (args[0].toLowerCase() == "color") {
                     if (args.length < 2) {
-                        terminal.printLine("Not enough arguments. Use me like this: 'color <text color> <background color>'");
+                        terminal.setForegroundColor("red");
+                        terminal.println("Not enough arguments.");
+                        terminal.println("Usage: 'color <text color> <background color>'");
+                        terminal.resetForegroundColor();
                     } else if (args.length < 3) {
                         terminal.setDefaultForegroundColor(args[1]);
                     } else {
                         if (args[1] != "-") terminal.setDefaultForegroundColor(args[1]);
                         terminal.setDefaultBackgroundColor(args[2]);
                     }
+                } else if (args[0].toLowerCase() == "echo") {
                 } else {
                     terminal.printLine(args[0] + " is not a known command.");
                 }
@@ -83,7 +51,6 @@
             setTimeout(repl, 0);
         });
     }
-
 
     function parseCommand(command) {
         var args = [];
