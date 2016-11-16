@@ -23,8 +23,8 @@
         internalSetDefaultForeground(fore);
         internalSetDefaultBackground(back);
 
-        setForegroundColor(fore);
-        setBackgroundColor(back);
+        terminal.setForegroundColor(fore);
+        terminal.setBackgroundColor(back);
     }
 
 
