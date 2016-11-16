@@ -27,7 +27,7 @@
                                 if (segments[i] in dirObject) {
                                     dirObject = dirObject[segments[i]];
                                 } else {
-                                    terminal.setForegroundColor("lightred");
+                                    terminal.setForegroundColor("red");
                                     terminal.printLine("'" + args[0] + "' is not a valid path.");
                                     terminal.resetForegroundColor();
                                     setTimeout(repl, 0);
@@ -38,7 +38,7 @@
                                     window.location.href = dirObject[segments[i]];
                                     return;
                                 } else {
-                                    terminal.setForegroundColor("lightred");
+                                    terminal.setForegroundColor("red");
                                     terminal.printLine("'" + args[0] + "' is not a valid filename.");
                                     terminal.resetForegroundColor();
                                     setTimeout(repl, 0);
@@ -46,7 +46,7 @@
                                 }
                             }
                         }
-                        terminal.setForegroundColor("lightred");
+                        terminal.setForegroundColor("red");
                         terminal.printLine("'" + args[0] + "' is not a valid path.");
                         terminal.resetForegroundColor();
                     }
@@ -118,7 +118,7 @@
 
     commands.echo = function(args) {
         if (args.length < 2) {
-            terminal.setForegroundColor("lightred");
+            terminal.setForegroundColor("red");
             terminal.println("You must specify text to be echoed.");
             terminal.resetForegroundColor();
         } else {
@@ -136,7 +136,7 @@
 
     commands.color = function(args) {
         if (args.length < 1) {
-            terminal.setForegroundColor("lightred");
+            terminal.setForegroundColor("red");
             terminal.println("Not enough arguments.");
             terminal.println("Usage: 'color [text color|-] (background color)'");
             terminal.resetForegroundColor();
@@ -150,7 +150,7 @@
 
     commands.icolor = function(args) {
         if (args.length < 1) {
-            terminal.setForegroundColor("lightred");
+            terminal.setForegroundColor("red");
             terminal.println("Not enough arguments.");
             terminal.println("Usage: 'color [text color|-] (background color)'");
             terminal.resetForegroundColor();

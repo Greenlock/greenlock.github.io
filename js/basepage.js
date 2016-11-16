@@ -6,6 +6,7 @@
         terminal.initialize();
 
         var path = getParameterByName("r") != null ? getParameterByName("r") : "index.js";
+        path = path.endsWith(".js") ? path : path + ".js";
         var parameter = getParameterByName("p");
 
         basepage.loadPage(path, parameter);
@@ -15,12 +16,12 @@
 
     basepage.loadPage = function(pageName, parameter) {
         terminal.clearScreen();
-        $.getScript("https://www.greenlock.co/js/page/" + pageName + ".js")
+        $.getScript("https://www.greenlock.co/js/page/" + pageName)
             .done(function( script, textStatus ) {
                 page.main(parameter);
             })
             .fail(function( jqxhr, settings, exception ) {
-                terminal.setForegroundColor("lightred");
+                terminal.setForegroundColor("red");
                 terminal.println("Invalid redirect '" + pageName + "'!");
                 terminal.resetForegroundColor();
             });
