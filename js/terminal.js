@@ -29,20 +29,24 @@
 
 
     terminal.setDefaultForegroundColor = function(color, callback) {
-        $("#transition-container").fadeOut(function() {
-            internalSetDefaultForeground(color);
-            localStorage.setItem("fore", color);
-            $("#transition-container").fadeIn(400, function() { callback(); });
-        });
+        if (color != defaultForegroundColor) {
+            $("#transition-container").fadeOut(function() {
+                internalSetDefaultForeground(color);
+                localStorage.setItem("fore", color);
+                $("#transition-container").fadeIn(400, function() { callback(); });
+            });
+        }
     }
 
     terminal.setDefaultBackgroundColor = function(color, callback) {
-        $("#transition-back").css("background-color", color);
-        $("#transition-container").fadeOut(400, function() {
-            internalSetDefaultBackground(color);
-            localStorage.setItem("back", color);
-            $("#transition-container").fadeIn(400, function() { callback(); });
-        });
+        if (color != defaultBackgroundColor) {
+            $("#transition-back").css("background-color", color);
+            $("#transition-container").fadeOut(400, function() {
+                internalSetDefaultBackground(color);
+                localStorage.setItem("back", color);
+                $("#transition-container").fadeIn(400, function() { callback(); });
+            });
+        }
     }
 
     terminal.setForegroundColor = function(color) {
