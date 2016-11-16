@@ -8,12 +8,12 @@
         var path = getParameterByName("r") != null ? getParameterByName("r") : "index.js";
         var parameter = getParameterByName("p");
 
-        loadpage(path, parameter);
+        basepage.loadPage(path, parameter);
 
         shell.main();
     }
 
-    basepage.loadpage = function(pageName, parameter) {
+    basepage.loadPage = function(pageName, parameter) {
         terminal.clearScreen();
         $.getScript("https://www.greenlock.co/js/page/" + pageName + ".js")
             .done(function( script, textStatus ) {
