@@ -1,51 +1,55 @@
 (function () {
 
-    this.shell = function() { };
+    this.shell = function() {};
 
-    shell.main = function () {
+    shell.main = function() {
         terminal.resetForegroundColor();
+        terminal.pintln("[REPL]");
+        return;
         shell.repl();
     }
 
     function repl() {
-        var cd = localStorage.getItem("cd");
-        terminal.print("\n[web " + (cd === false ? "/" : cd + "]$ ");
+        terminal.print("\n[web " + cd + "]$ ");
         terminal.readln(function (command) {
             var args = parseCommand(command);
             if (args.length > 0) {
-                if (args[0].toLowerCase() == "help") {
-                    terminal.println("This website is a Bash-esque command line terminal.");
-                    terminal.println("Available commands: help, echo, cls, clear, color");
-                } else if (args[0].toLowerCase() == "echo") {
-                    if (args.length < 2) {
-                        terminal.setForegroundColor("red");
-                        terminal.println("Not enough arguments.");
-                        terminal.resetForegroundColor();
-                    } else {
-                        var remainingArgs = argsFrom(1, args);
-                        var echo = "";
-                        for (var i = 0; i < remainingArgs.length; i++) {
-                            echo += (i == 0 ? "" : " ") + remainingArgs[i];
-                        }
-                        terminal.printLine(echo);
-                    }
-                } else if (args[0].toLowerCase() == "cls" || args[0].toLowerCase() == "clear") {
-                    terminal.clearScreen();
-                } else if (args[0].toLowerCase() == "color") {
-                    if (args.length < 2) {
-                        terminal.setForegroundColor("red");
-                        terminal.println("Not enough arguments.");
-                        terminal.println("Usage: 'color <text color> <background color>'");
-                        terminal.resetForegroundColor();
-                    } else if (args.length < 3) {
-                        terminal.setDefaultForegroundColor(args[1]);
-                    } else {
-                        if (args[1] != "-") terminal.setDefaultForegroundColor(args[1]);
-                        terminal.setDefaultBackgroundColor(args[2]);
-                    }
-                } else if (args[0].toLowerCase() == "echo") {
+                if (commands.hasOwnProperty(args[0])) {
+                    commands[args[0]](argsFrom(1, args));
                 } else {
-                    terminal.printLine(args[0] + " is not a known command.");
+                    if (args[0] == "/") {
+                        terminal.printLine("'" + args[0] + "' is a directory.");
+                    } else {
+                        var segments = args[0].toLowerCase().substring(1).split("/");
+                        var dirObject = filesystem;
+                        for (var i = 0; i < segments.length; i++) {
+                            if (i < segments.length - 1) {
+                                if (segments[i] in dirObject) {
+                                    dirObject = dirObject[segments[i]];
+                                } else {
+                                    terminal.setForegroundColor("lightred");
+                                    terminal.printLine("'" + args[0] + "' is not a valid path.");
+                                    terminal.resetForegroundColor();
+                                    setTimeout(repl, 0);
+                                    return;
+                                }
+                            } else {
+                                if (segments[i] in dirObject && typeof dirObject[segments[i]] === "string") {
+                                    window.location.href = dirObject[segments[i]];
+                                    return;
+                                } else {
+                                    terminal.setForegroundColor("lightred");
+                                    terminal.printLine("'" + args[0] + "' is not a valid filename.");
+                                    terminal.resetForegroundColor();
+                                    setTimeout(repl, 0);
+                                    return;
+                                }
+                            }
+                        }
+                        terminal.setForegroundColor("lightred");
+                        terminal.printLine("'" + args[0] + "' is not a valid path.");
+                        terminal.resetForegroundColor();
+                    }
                 }
             }
             setTimeout(repl, 0);
@@ -102,6 +106,71 @@
             returnList.push(args[i]);
         }
         return returnList;
+    }
+
+
+    var commands = function() {};
+
+    commands.help = function(args) {
+        terminal.println("This website is a simplistic shell terminal populated with some common Bash commands.");
+        terminal.println("Built-in commands: help, echo, clear, color, dcolor, cd");
+    }
+
+    commands.echo = function(args) {
+        if (args.length < 2) {
+            terminal.setForegroundColor("lightred");
+            terminal.println("You must specify text to be echoed.");
+            terminal.resetForegroundColor();
+        } else {
+            var echo = "";
+            for (var i = 0; i < args.length; i++) {
+                echo += (i == 0 ? "" : " ") + args[i];
+            }
+            terminal.printLine(echo);
+        }
+    }
+
+    commands.clear = function(args) {
+        terminal.clearScreen();
+    }
+
+    commands.color = function(args) {
+        if (args.length < 1) {
+            terminal.setForegroundColor("lightred");
+            terminal.println("Not enough arguments.");
+            terminal.println("Usage: 'color [text color|-] (background color)'");
+            terminal.resetForegroundColor();
+        } else if (args.length < 2) {
+            if (args[0] != "-") terminal.setDefaultForegroundColor(args[0]);
+        } else {
+            if (args[0] != "-") terminal.setDefaultForegroundColor(args[0]);
+            if (args[1] != "-") terminal.setDefaultBackgroundColor(args[1]);
+        }
+    }
+
+    commands.icolor = function(args) {
+        if (args.length < 1) {
+            terminal.setForegroundColor("lightred");
+            terminal.println("Not enough arguments.");
+            terminal.println("Usage: 'color [text color|-] (background color)'");
+            terminal.resetForegroundColor();
+        } else if (args.length < 2) {
+            if (args[0] != "-") terminal.setForegroundColor(args[0]);
+        } else {
+            if (args[0] != "-") terminal.setForegroundColor(args[0]);
+            if (args[1] != "-") terminal.setBackgroundColor(args[1]);
+        }
+    }
+
+    commands.cd = function(args) {
+
+    }
+
+
+    var filesystem = function() {};
+
+    filesystem = {
+        "index.html": "https://www.greenlock.co/p/index.html"
     }
 
 }.call(this));

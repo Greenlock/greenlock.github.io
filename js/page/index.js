@@ -2,7 +2,7 @@
 
     this.page = function() { };
 
-    page.main = function() {
+    page.main = function(parameter) {
         terminal.println("//Greetings!\n");
 
         terminal.setForegroundColor("limegreen");
@@ -32,8 +32,6 @@
 
         terminal.setForegroundColor("violet");
         terminal.println("*This website is Certified Tasty");
-
-        shell.main();
     }
 
 }.call(this));
