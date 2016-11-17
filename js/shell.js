@@ -170,7 +170,7 @@
     var filesystem = function() {};
 
     filesystem = {
-        "index.html": "https://www.greenlock.co/p/index.html"
+        "index.html": "www.greenlock.co/p/index.html"
     }
 
 }.call(this));
