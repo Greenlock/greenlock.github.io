@@ -18,7 +18,6 @@
         terminal.clearScreen();
         $.getScript("https://www.greenlock.co/js/page/" + pageName)
             .done(function( script, textStatus ) {
-                history.pushState({},"Greenlock.co","https://www.greenlock.co/js/page/" + pageName);
                 page.main(parameter);
             })
             .fail(function( jqxhr, settings, exception ) {
