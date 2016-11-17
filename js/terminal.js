@@ -70,7 +70,7 @@
     function internalSetDefaultForeground(color) {
         $("#transition-container").css("color", color);
         $("#stdin").css("color", foregroundColor == defaultForegroundColor ? color : foregroundColor);
-        $("#anchor-color").html("a:link{color:" + color + "}a:hover{color:" + color + "}a:active{color:" + color + "}a:visited{color:" + color + "}");
+        $("#anchor-style").html("a:link{color:" + color + "}a:hover{color:" + color + "}a:active{color:" + color + "}a:visited{color:" + color + "}");
         defaultForegroundColor = color;
     }
 

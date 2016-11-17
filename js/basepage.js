@@ -5,11 +5,19 @@
     basepage.main = function() {
         terminal.initialize();
 
-        var path = getParameterByName("r") != null ? getParameterByName("r") : "index.js";
+        var path = getParameterByName("r") != null ? getParameterByName("r") : "index";
         path = path.endsWith(".js") ? path : path + ".js";
         var parameter = getParameterByName("p");
 
-        basepage.loadPage(path, parameter);
+        $.getScript("/js/page/" + path)
+            .done(function( script, textStatus ) {
+                page.main(parameter);
+            })
+            .fail(function( jqxhr, settings, exception ) {
+                terminal.setForegroundColor("red");
+                terminal.println("Invalid redirect '" + path + "'!");
+                terminal.resetForegroundColor();
+            });
 
         shell.main();
     }
