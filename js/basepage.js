@@ -16,9 +16,9 @@
 
     basepage.loadPage = function(pageName, parameter) {
         terminal.clearScreen();
-        $.getScript("www.greenlock.co/js/page/" + pageName)
+        $.getScript("/js/page/" + pageName)
             .done(function( script, textStatus ) {
-                history.pushState({},"Greenlock.co","www.greenlock.co/?r=" + encodeURI(pageName));
+                history.pushState({},"Greenlock.co","/?r=" + encodeURI(pageName));
                 page.main(parameter);
             })
             .fail(function( jqxhr, settings, exception ) {
