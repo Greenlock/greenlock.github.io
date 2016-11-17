@@ -3,6 +3,9 @@
     this.page = function() { };
 
     page.main = function(parameter) {
+        terminal.setDefaultForegroundColor("white");
+        terminal.setDefaultBackgroundColor("black");
+
         terminal.println("//Greetings!\n");
 
         terminal.setForegroundColor("limegreen");
