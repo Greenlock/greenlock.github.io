@@ -23,9 +23,9 @@
 
         terminal.setForegroundColor("silver");
         terminal.print("You can also find me on ");
-        terminal.printlink("Twitter", "twitter.com/greenlock28");
+        terminal.printlink("Twitter", "https://twitter.com/greenlock28");
         terminal.print(" and ");
-        terminal.printlink("GitHub", "github.com/Greenlock");
+        terminal.printlink("GitHub", "https://github.com/Greenlock");
         terminal.print(".\n\n");
 
         terminal.println("This website is supposed to be a shell terminal, but is incomplete at this time. The interactive shell and more content will be coming soon!\n");
