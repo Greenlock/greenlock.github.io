@@ -108,6 +108,14 @@
         return returnList;
     }
 
+    function getCurrentDirectory() {
+        return localStorage.getItem("cd") === false ? "/" : localStorage.getItem("cd");
+    }
+
+    function setCurrentDirectory(dir) {
+        localStorage.setItem("cd", dir.endsWith("/") ? dir : dir + "/");
+    }
+
 
     var commands = function() {};
 
@@ -163,14 +171,74 @@
     }
 
     commands.cd = function(args) {
-
+        if (args.length < 1) {
+            terminal.println("The current directory is: " + getCurrentDirectory());
+        } else {
+            if (filesystem.isDirectory(args[0])) {
+                setCurrentDirectory(args[0]);
+            } else {
+                terminal.setForegroundColor("red");
+                terminal.println(args[0] + " does not exist!");
+                terminal.println("Usage: 'color [text color|-] (background color)'");
+                terminal.resetForegroundColor();
+            }
+        }
     }
 
 
     var filesystem = function() {};
 
-    filesystem = {
-        "index.html": "/p/index.html"
+    filesystem.index = [
+        "/index.js"
+    ]
+
+    filesystem.getParentDirectory = function(path) {
+        var search = path.endsWith("/") ? path.substring(0, path.length - 1) : path;
+        return search.substring(0, search.lastIndexOf("/"));
+    }
+
+    filesystem.isFile = function(f) {
+        for (var i = 0; i < filesystem.index.length; i++) {
+            if (filesystem.index[i] == f) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    filesystem.isDirectory = function(dir) {
+        var search = dir.endsWith("/") ? dir : dir + "/";
+        for (var i = 0; i < filesystem.index.length; i++) {
+            if (filesystem.index[i].startsWith(search)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    filesystem.getFiles = function(dir) {
+        var search = dir.endsWith("/") ? dir : dir + "/";
+        var files = [];
+        for (var i = 0; i < filesystem.index.length; i++) {
+            if (filesystem.index[i].startsWith(search) && filesystem.index[i].substring(search.length).indexOf("/") < 0) {
+                files.push(filesystem.index[i].substring(search.length));
+            }
+        }
+        return files;
+    }
+
+    filesystem.getDirectories = function(dir) {
+        var search = dir.endsWith("/") ? dir : dir + "/";
+        var dirs = [];
+        for (var i = 0; i < filesystem.index.length; i++) {
+            if (filesystem.index[i].startsWith(search) && filesystem.index[i].substring(search.length).indexOf("/") > 0) {
+                var name = filesystem.index[i].substring(search.length).split("/")[0];
+                if (!(name in dirs)) {
+                    dirs.push(name);
+                }
+            }
+        }
+        return dirs;
     }
 
 }.call(this));
