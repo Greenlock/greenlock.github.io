@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Ghostly</title>
+
+		<meta name="description" content="A simple online game">
+		<meta name="keywords" content="greenlock,game,ghostly,ghost">
+		<meta name="author" content="Greenlock">
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="./style.css"/>
+
+		<script src="./jquery.min.js"></script>
+		<script src="./jquery-ui.min.js"></script>
+
+		<script src="./menu.js"></script>
+		<script src="./tiles.js"></script>
+		<script src="./ghostly.js"></script>
+	</head>
+
+	<body onload="setTimeout(onLoad, 2000)">
+		<div id="tile-grid">
+			<div class="tile x-0 y-0" onmousedown="onTileDown(0,0)" onmouseup="onTileUp(0,0)"><div class="inner-tile"></div></div>
+			<div class="tile x-1 y-0" onmousedown="onTileDown(1,0)" onmouseup="onTileUp(1,0)"><div class="inner-tile"></div></div>
+			<div class="tile x-2 y-0" onmousedown="onTileDown(2,0)" onmouseup="onTileUp(2,0)"><div class="inner-tile"></div></div>
+			<div class="tile x-3 y-0" onmousedown="onTileDown(3,0)" onmouseup="onTileUp(3,0)"><div class="inner-tile"></div></div>
+			<div class="tile x-4 y-0" onmousedown="onTileDown(4,0)" onmouseup="onTileUp(4,0)"><div class="inner-tile"></div></div>
+
+			<div class="tile x-0 y-1" onmousedown="onTileDown(0,1)" onmouseup="onTileUp(0,1)"><div class="inner-tile"></div></div>
+			<div class="tile x-1 y-1" onmousedown="onTileDown(1,1)" onmouseup="onTileUp(1,1)"><div class="inner-tile"></div></div>
+			<div class="tile x-2 y-1" onmousedown="onTileDown(2,1)" onmouseup="onTileUp(2,1)"><div class="inner-tile"></div></div>
+			<div class="tile x-3 y-1" onmousedown="onTileDown(3,1)" onmouseup="onTileUp(3,1)"><div class="inner-tile"></div></div>
+			<div class="tile x-4 y-1" onmousedown="onTileDown(4,1)" onmouseup="onTileUp(4,1)"><div class="inner-tile"></div></div>
+
+			<div class="tile x-0 y-2" style="background-color:red" onmousedown="onTileDown(0,2)" onmouseup="onTileUp(0,2)"><div class="inner-tile"></div><span class="title">CO</span></div>
+			<div class="tile x-1 y-2" style="background-color:green" onmousedown="onTileDown(1,2)" onmouseup="onTileUp(1,2)"><div class="inner-tile"></div><span class="title">LO</span></div>
+			<div class="tile x-2 y-2" style="background-color:purple" onmousedown="onTileDown(2,2)" onmouseup="onTileUp(2,2)"><div class="inner-tile"></div><span class="title">R</span></div>
+			<div class="tile x-3 y-2" style="background-color:yellow" onmousedown="onTileDown(3,2)" onmouseup="onTileUp(3,2)"><div class="inner-tile"></div><span class="title">IF</span></div>
+			<div class="tile x-4 y-2" style="background-color:blue" onmousedown="onTileDown(4,2)" onmouseup="onTileUp(4,2)"><div class="inner-tile"></div><span class="title">IC</span></div>
+
+			<div class="tile x-0 y-3" onmousedown="onTileDown(0,3)" onmouseup="onTileUp(0,3)"><div class="inner-tile"></div></div>
+			<div class="tile x-1 y-3" onmousedown="onTileDown(1,3)" onmouseup="onTileUp(1,3)"><div class="inner-tile"></div></div>
+			<div class="tile x-2 y-3" onmousedown="onTileDown(2,3)" onmouseup="onTileUp(2,3)"><div class="inner-tile"></div></div>
+			<div class="tile x-3 y-3" onmousedown="onTileDown(3,3)" onmouseup="onTileUp(3,3)"><div class="inner-tile"></div></div>
+			<div class="tile x-4 y-3" onmousedown="onTileDown(4,3)" onmouseup="onTileUp(4,3)"><div class="inner-tile"></div></div>
+
+			<div class="tile x-0 y-4" onmousedown="onTileDown(0,4)" onmouseup="onTileUp(0,4)"><div class="inner-tile"></div></div>
+			<div class="tile x-1 y-4" onmousedown="onTileDown(1,4)" onmouseup="onTileUp(1,4)"><div class="inner-tile"></div></div>
+			<div class="tile x-2 y-4" onmousedown="onTileDown(2,4)" onmouseup="onTileUp(2,4)"><div class="inner-tile"></div></div>
+			<div class="tile x-3 y-4" onmousedown="onTileDown(3,4)" onmouseup="onTileUp(3,4)"><div class="inner-tile"></div></div>
+			<div class="tile x-4 y-4" onmousedown="onTileDown(4,4)" onmouseup="onTileUp(4,4)"><div class="inner-tile"></div></div>
+		</div>
+		<div id="inventory">
+			<div class="inv-tile i-9"></div>
+			<div class="inv-tile i-8"></div>
+			<div class="inv-tile i-7"></div>
+			<div class="inv-tile i-6"></div>
+			<div class="inv-tile i-5"></div>
+			<div class="inv-tile i-4"></div>
+			<div class="inv-tile i-3"></div>
+			<div class="inv-tile i-2"></div>
+			<div class="inv-tile i-1"></div>
+			<div class="inv-tile i-0"></div>
+		</div>
+		<div id="main-menu" class="menu">
+			<span>[<span class="menu-button" onclick="onMainMenuLoadClick()">LOAD</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onMainMenuNewClick()">NEW</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onMainMenuCloneClick()">CLONE</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onMainMenuResetClick()">RESET</span>]</span>
+		</div>
+		<div id="load-menu" class="menu">
+			<span>Save name:&nbsp;<input type="text" class="menu-input" value=""/>&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onLoadMenuOkClick()">OK</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onLoadMenuCancelClick()">CANCEL</span>]</span>
+		</div>
+		<div id="new-menu" class="menu">
+			<span>New name:&nbsp;<input type="text" class="menu-input" value=""/>&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onNewMenuOkClick()">OK</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onNewMenuCancelClick()">CANCEL</span>]</span>
+		</div>
+		<div id="clone-menu" class="menu">
+			<span>Cloned name:&nbsp;<input type="text" class="menu-input" value=""/>&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onCloneMenuOkClick()">OK</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onCloneMenuCancelClick()">CANCEL</span>]</span>
+		</div>
+		<div id="reset-menu" class="menu">
+			<span>Reset this save file?&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onResetMenuYesClick()">YES</span>]&nbsp;&nbsp;&nbsp;[<span class="menu-button" onclick="onResetMenuCancelClick()">CANCEL</span>]</span>
+		</div>
+	</body>
+</html>
